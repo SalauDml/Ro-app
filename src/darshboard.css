@@ -1,0 +1,53 @@
+.logo {
+    width: 10rem;
+}
+
+.logo img {
+    width: 100%;
+}
+
+.container {
+    background-color: white;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.flex-row-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.flex-col-center {
+    display: flex;
+    justify-content: columns;
+    align-items: center;
+}
+
+
+.flex-row-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.p-1 {
+    padding: 0.7rem;
+}
+
+.p1 {
+    padding: 1rem;
+}
+
+.m1 {
+    margin: 1rem;
+}
+
+
+.product_container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 5% auto;
+}
