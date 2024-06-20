@@ -11,8 +11,9 @@ export default function Admin() {
         price: "",
       };
 
+  const initialResponseDataStructure = { type: "", message: "" };
   // State to hold form data
-  const [response, setResponse] = useState({ type: "", message: "" });
+  const [response, setResponse] = useState(initialResponseDataStructure);
   const [formData, setFormData] = useState(initialFormData);
 
   // Function to handle form input changes
@@ -25,6 +26,41 @@ export default function Admin() {
   };
 
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch("http://127.0.0.1:8000/product/add_product/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(formData)
+      });
+
+
+    if(response.ok) {
+      const result = await response.json();
+      setResponse({ type: "success", message: result.message})
+
+      // Sets form vlues empty
+      setFormData(initialFormData)
+
+      //At 5 secs, set the response hook empty
+      setTimeout(() => {
+        setResponse(initialResponseDataStructure)
+      }, 5000);
+    }else {
+      const errorData = await response.json();
+      setResponse({ type: "failure", message: errorData.message })
+    }
+
+    } catch (error){
+      console.log(error.message, "catch error")
+      setResponse({ type: "failure", message: "Internal Server Error" })
+    } 
+  }
+
+
   return (
     <main>
     <section className="container flex-row-between p-1">
@@ -33,7 +69,7 @@ export default function Admin() {
           </div>
 
           <div>
-            asdfg
+            Search
           </div>
     </section>
 
@@ -46,7 +82,7 @@ export default function Admin() {
         ) : (
           ""
         )}
-        <form className="form" onSubmit={()=>"Something here"}>
+        <form className="form" onSubmit={handleSubmit}>
         <h2 className="title">Add a Product</h2>
           <div className="flex-row">
             <label>
