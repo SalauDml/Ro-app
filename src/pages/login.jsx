@@ -1,14 +1,17 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";  // Import useNavigate
+import { setCookie } from "../utils/functions";
 
 export default function Login() {
   const initialFormData = {
-    email: "",
+    username: "",
     password: ""
   };
 
   // State to hold form data
   const [response, setResponse] = useState({ type: "", message: "" });
   const [formData, setFormData] = useState(initialFormData);
+  const navigate = useNavigate();  // Initialize navigate
 
   // Function to handle form input changes
   const handleInputChange = (e) => {
@@ -23,22 +26,25 @@ export default function Login() {
     e.preventDefault();
     try {
       // Mock response
-      const res = {
-        ok: true,
-        json: async () => ({ message: "Login successful" })
-      };
+      const response = await fetch("http://127.0.0.1:8000/user/login/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
 
-      console.log(formData, "TESTING")
-
-      if (res.ok) {
-        const result = await res.json();
+      if (response.ok) {
+        const result = await response.json();
+        setCookie(result.token);
         setResponse({ type: "success", message: result.message });
         setFormData(initialFormData);
         setTimeout(() => {
           setResponse({ type: "", message: "" });
-        }, 5000);
+          navigate("/dashboard");  // Redirect to dashboard after login
+        }, 500);
       } else {
-        const errorData = await res.json();
+        const errorData = await response.json();
         setResponse({ type: "failure", message: errorData.message || "An error occurred" });
       }
     } catch (error) {
@@ -61,11 +67,11 @@ export default function Login() {
             <h2 className="title">Login</h2>
             <div className="flex-row">
               <label>
-                Email:
+                Username:
                 <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
+                  type="text"
+                  name="username"
+                  value={formData.username}
                   onChange={handleInputChange}
                 />
               </label>
