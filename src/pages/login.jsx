@@ -45,7 +45,7 @@ export default function Login() {
         }, 500);
       } else {
         const errorData = await response.json();
-        setResponse({ type: "failure", message: errorData.message || "An error occurred" });
+        setResponse({ type: "failure", message: "An error occurred" });
       }
     } catch (error) {
       setResponse({ type: "failure", message: error.message || "An error occurred" });
